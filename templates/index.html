@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribusi Binomial</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        // Fungsi untuk menampilkan pilihan berdasarkan pilihan alat percobaan
+        function updatePilihan() {
+            var alat = document.getElementById('alat').value;
+            var pilSelect = document.getElementById('pilihan');
+            pilSelect.innerHTML = ''; // Bersihkan pilihan yang ada
+
+            if (alat == 'koin') {
+                var options = ['Head', 'Tail'];
+                options.forEach(function(option) {
+                    var opt = document.createElement('option');
+                    opt.value = option.toLowerCase();
+                    opt.textContent = option;
+                    pilSelect.appendChild(opt);
+                });
+            } else if (alat == 'dadu') {
+                var options = ['1', '2', '3', '4', '5', '6'];
+                options.forEach(function(option) {
+                    var opt = document.createElement('option');
+                    opt.value = option;
+                    opt.textContent = option;
+                    pilSelect.appendChild(opt);
+                });
+            }
+        }
+
+        // Update pilihan ketika halaman dimuat
+        window.onload = updatePilihan;
+    </script>
+</head>
+<body>
+    <h1>Hitung Probabilitas Binomial</h1>
+    <form method="POST">
+        <label for="alat">Pilih Alat Percobaan:</label>
+        <select name="alat" id="alat" onchange="updatePilihan()">
+          <option value="koin">Koin (p = 1/2 atau 0.5)</option>
+          <option value="dadu">Dadu (p = 1/6 atau 0.166..)</option>
+        </select><br><br>
+      
+        <label for="n">Jumlah Percobaan (n):</label>
+        <input type="number" name="n" required><br><br>
+
+        <label for="pil">Pilihan yang diinginkan:</label>
+        <select name="pil" id="pilihan" required>
+            <!-- Pilihan akan diisi oleh script -->
+        </select><br><br>
+        
+        <label for="k">Jumlah Sukses yang Diinginkan (k):</label>
+        <input type="number" name="k" required><br><br>
+      
+        <button type="submit">Hitung</button>
+    </form>
+
+    {% if probabilitas is not none %}
+    <h2>Hasil:</h2>
+    <p>Peluang mendapatkan tepat {{ k }} kali '{{ pil }}' dari {{ n }} percobaan adalah sebesar {{ probabilitas }} atau {{ presentase }}%</p>
+    <h3>Grafik Distribusi Binomial</h3>
+    <img src="data:image/png;base64,{{ img_base64 }}" alt="Grafik Distribusi Binomial">
+    {% endif %}
+</body>
+</html>
